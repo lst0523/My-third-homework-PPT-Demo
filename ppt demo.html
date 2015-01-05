@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title >PPT Demo</title>
+	<style type="text/css">
+	* 
+	{
+		margin: 0px;
+		padding: 0px;
+		border: 0px;
+	}
+	#main
+	{
+		height: 170px;
+		width: 490px;
+		margin: 100px auto;
+		position:relative;
+	}
+	img 
+	{
+		width: 490px;
+		height: 170px;
+		border:5px solid #CC3399;
+		border-radius: 10px;
+	}
+	#image li
+	{
+		list-style: none;
+	}
+	#number
+	{
+		z-index: 999;
+		position:absolute;
+		bottom:10px;
+		right:20px;
+	}
+
+	#number li
+	{
+		display: block;
+		height: 20px;
+		width: 20px;
+		list-style: none;
+		color: #DE7D4B;
+		background-color: #FFFFFF;
+		border-radius:20px;
+		text-align:center;
+		float:left;
+		margin-left: 5px;
+		opacity:0.7;
+		cursor:pointer;
+	}
+
+	#number li.selected
+	{
+		background: #FF6600;
+		color: #FFFFFF;
+		font-weight:bold;
+	}
+	</style>
+</head>
+
+<body>
+	<div id="main">
+		<ul id="image">
+			<li class="show">
+				<a href="" target="_blank">
+					<img src="pictures/pic1.png"/>
+				</a>
+			</li>
+			<li style="display:none" class="">
+				<a href="" target="_blank">
+					<img src="pictures/pic2.gif"/>
+				</a>
+			</li>
+			<li style="display:none" class="">
+				<a href="" target="_blank">
+					<img src="pictures/pic3.jpg"/>
+				</a>
+			</li>
+			<li style="display:none" class="">
+				<a href="" target="_blank">
+					<img src="pictures/pic4.jpg"/>
+				</a>
+			</li>
+			<li style="display:none" class="">
+				<a href="" target="_blank">
+					<img src="pictures/pic5.jpg"/>
+				</a>
+			</li>
+		</ul>
+		
+		<ul id="number">
+			<li class="selected">1</li>
+			<li class="">2</li>
+			<li class="">3</li>
+			<li class="">4</li>
+			<li class="">5</li>
+		</ul>
+	</div>
+
+
+	<script type="text/javascript">
+	function $(id)
+    {
+    	return typeof id==='string'?document.getElementById(id):id;
+    }
+    var nums=document.getElementById('number').getElementsByTagName('li');
+    var imgs = document.getElementById('image').getElementsByTagName('li');
+    var index=0;
+    var time=null;
+
+//------------------------------------display----------------------------//
+    window.onload=function()
+    {
+    	if (nums.length!=imgs.length)
+    		return ;
+    	for (var i = 0; i < nums.length; i++) 
+    	{
+    		nums[i].id=i;
+    		nums[i].onmouseover=function()
+    		{
+                for (var j = 0; j < nums.length; j++) 
+                {
+                	nums[j].className='none';
+                	imgs[j].style.display='none';
+                };
+                this.className='selected';
+                imgs[this.id].style.display='block';
+    		}
+    	};
+    }
+
+//-----------------------------------------auto move---------------------------//
+    window.onload=move;
+    function move()
+    {
+    	for (var k = 0; k <nums.length; k++) 
+    	{
+    		nums[k].id=k;
+    		nums[k].onmouseover=function()
+    		{
+    			clearInterval(time);
+    			change(this.id);
+    		}
+    		nums[k].onmouseout=function()
+    		{
+    			time=setInterval(autoPlay,2000);
+    		}
+
+    	};
+    	for (var t = 0; t <imgs.length; t++) 
+    	{
+    		imgs[t].id=t;
+    		imgs[t].onmouseover=function()
+    		{
+    			clearInterval(time);
+    			change(this.id);
+    		}
+    		imgs[t].onmouseout=function()
+    		{
+    			time=setInterval(autoPlay,2000);
+    		}
+
+    	};
+
+    	if (time)
+    	{
+    		clearInterval(time);
+    		time=null;
+    	}
+ 	
+    	time=setInterval(autoPlay,2000);
+
+    	function autoPlay()
+    	{
+    		index++;
+    		if(index>=nums.length)
+    		{
+    			index=0;
+    		}
+    		change(index);
+
+    	}
+
+    	function change(curIndex)
+    	{
+    		for (var z = 0; z < nums.length; z++)
+    		{
+            	nums[z].className='';
+            	imgs[z].style.display='none';
+            };
+            nums[curIndex].className='selected';
+            imgs[curIndex].style.display='block';
+            index=curIndex;
+    	}
+    }
+
+	</script>
+
+</body>
+</html>
